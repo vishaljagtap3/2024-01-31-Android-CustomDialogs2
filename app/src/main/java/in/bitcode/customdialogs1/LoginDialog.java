@@ -12,6 +12,18 @@ public class LoginDialog extends Dialog {
     private EditText edtUsername, edtPassword;
     private Button btnLogin;
     private Context context;
+
+    interface OnLoginListener {
+        void onSuccess(LoginDialog loginDialog);
+        void onFail(LoginDialog loginDialog);
+    }
+
+    private OnLoginListener onLoginListener = null;
+
+    public void setOnLoginListener(OnLoginListener onLoginListener) {
+        this.onLoginListener = onLoginListener;
+    }
+
     public LoginDialog(Context context) {
         super(context);
         this.context = context;
@@ -24,11 +36,14 @@ public class LoginDialog extends Dialog {
         @Override
         public void onClick(View view) {
             if(edtUsername.getText().toString().equals("bitcode") && edtPassword.getText().toString().equals("bitcode")) {
-                mt("Login success");
-                dismiss();
+                if(onLoginListener != null) {
+                    onLoginListener.onSuccess(LoginDialog.this);
+                }
             }
             else {
-                mt("Login failed");
+                if(onLoginListener != null) {
+                    onLoginListener.onFail(LoginDialog.this);
+                }
             }
         }
     }

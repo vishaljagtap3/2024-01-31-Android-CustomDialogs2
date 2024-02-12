@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,9 +22,27 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         LoginDialog loginDialog = new LoginDialog(MainActivity.this);
+                        loginDialog.setOnLoginListener(new MyOnLoginListener());
                         loginDialog.show();
                     }
                 }
         );
+    }
+
+    private class MyOnLoginListener implements LoginDialog.OnLoginListener {
+        @Override
+        public void onSuccess(LoginDialog loginDialog) {
+            mt("My Success action");
+            loginDialog.dismiss();
+        }
+
+        @Override
+        public void onFail(LoginDialog loginDialog) {
+            mt("My fail action");
+        }
+    }
+
+    private void mt(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }
